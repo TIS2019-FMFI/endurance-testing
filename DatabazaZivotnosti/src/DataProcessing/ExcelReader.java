@@ -51,7 +51,7 @@ private static void doReadExcel() {
 		}
 	} 
 	else {
-		System.out.println("Toto neexistuje ty kokote");
+		System.out.println("Toto neexistuje");
 	}
 	
 }

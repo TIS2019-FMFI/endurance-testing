@@ -31,16 +31,28 @@ public class Produkt {
 	}
 	
 	
-	public void vytvorStrukturu(String path) {
+	public void nacitajStrukturu(String path) {
 		ExcelReader subor = new ExcelReader();
 		subor.readExcel(path);
 		Produkt novy = new Produkt(subor.getBezeichnung(), subor.getKunde(), subor.getZeichnungsnummer());
-		
+		if(novy.existuje()) {
+			/*pridame verziu*/
+		}
+		else {
+			vytvorStrukturu();
+		}
 	}
 	
-	public boolean existuje(Produkt produkt) {
-		
+	public boolean existuje() {
+		/*Vytvorit ProduktFinder, ktorý bude mať funkciu find produkt by kunde, part of zeichnungsnummer a bezeichnung
+		 * ak taky existuje vratime true inak false
+		 * */
 		return false;
 	}
+	
+	public void vytvorStrukturu() {
+		/*vytvori novu strukturu pre dany produkt*/
+	}
+	
 }
 
