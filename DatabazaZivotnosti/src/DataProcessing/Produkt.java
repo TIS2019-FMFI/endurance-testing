@@ -1,5 +1,9 @@
 package DataProcessing;
 
+import java.sql.Connection;
+
+import DatabaseConnector.ProduktFinder;
+
 public class Produkt {
 	String Bezeichnung;	//umiestnenie dielu
 	String Kunde; //zakaznik
@@ -47,7 +51,8 @@ public class Produkt {
 		/*Vytvorit ProduktFinder, ktorý bude mať funkciu find produkt by kunde, part of zeichnungsnummer a bezeichnung
 		 * ak taky existuje vratime true inak false
 		 * */
-		return false;
+		ProduktFinder pf = new ProduktFinder();
+		return pf.produktFinder(Kunde, Zeichnungsnummer, Bezeichnung).size() != 0 ;
 	}
 	
 	public void vytvorStrukturu() {
