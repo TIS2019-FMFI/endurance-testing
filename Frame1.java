@@ -4,6 +4,8 @@ import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import java.awt.Color;
+import java.awt.Dimension;
+
 import javax.swing.JLabel;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
@@ -62,12 +64,23 @@ public class Frame1 {
 		JMenuBar menuBar = new JMenuBar();
 		frmMain.setJMenuBar(menuBar);
 		
-		JMenu mnUploadFile = new JMenu("Upload File");
+		JMenuItem mnUploadFile = new JMenuItem("Upload File");
 		mnUploadFile.setBackground(Color.WHITE);
 		mnUploadFile.setForeground(Color.BLACK);
+		mnUploadFile.setPreferredSize(new Dimension(10, 20));
+		mnUploadFile.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				new Frame2(frmMain);
+				//frmMain.setVisible(false);
+			}
+			
+		});
 		menuBar.add(mnUploadFile);
 		
-		JMenu mnNewMenu = new JMenu("LOG");
+		JMenuItem mnNewMenu = new JMenuItem("LOG");
+		menuBar.setPreferredSize(new Dimension(10, 20));
 		menuBar.add(mnNewMenu);
 		
 		JMenu mnNewMenu_1 = new JMenu("Language");
