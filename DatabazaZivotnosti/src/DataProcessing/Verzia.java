@@ -1,17 +1,21 @@
 package DataProcessing;
 
-import DatabaseConnector.ProduktInsert;
+import javax.sql.DataSource;
+
 import DatabaseConnector.VerziaInsert;
 
 public class Verzia {
 	String Zeichnungsnummer; //seriove cislo
 	String Verzia;
 	Integer Id_objednavky;
+	DataSource dataSource;
 	
-	public Verzia(String zeichnungsnummer, String verzia, Integer id_objednavky) {
+	public Verzia(String zeichnungsnummer, String verzia, Integer id_objednavky, DataSource datasource) {
 		Zeichnungsnummer = zeichnungsnummer;
 		Verzia = verzia;
 		Id_objednavky = id_objednavky;
+		dataSource = datasource;
+		this.pridajVerziu();
 	}
 	
 	public String getZeichnungsnummer() {
@@ -26,7 +30,7 @@ public class Verzia {
 	public void setVerzia(String verzia) {
 		Verzia = verzia;
 	}
-	public Integer getId_objednavky() {
+	public Integer getId_objednavky() {			
 		return Id_objednavky;
 	}
 	public void setId_objednavky(Integer id_objednavky) {
@@ -34,7 +38,7 @@ public class Verzia {
 	}
 	
 	public void pridajVerziu() {
-		VerziaInsert pi = new VerziaInsert();
+		VerziaInsert pi = new VerziaInsert(dataSource);
 		pi.insert(Zeichnungsnummer, Verzia, Id_objednavky);
 	}
 	
