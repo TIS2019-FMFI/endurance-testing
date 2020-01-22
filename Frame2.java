@@ -16,6 +16,7 @@ import java.awt.event.ActionEvent;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 
+
 public class Frame2 {
 
 	private JFrame frame;
@@ -82,7 +83,15 @@ public class Frame2 {
 				String source = txt.getText();
 				
 				@Deprecated // testovacie path
-				String destination = "C:\\Users\\Maros\\Desktop\\" + rightUntil(source, '\\'); // neskor konstanta
+				String destination = "C:\\Users\\Koso\\Downloads\\AA_477015_11_outer_bush_zaoblene_IT (2).xlsx";// + rightUntil(source, '\\'); // neskor konstanta
+				/*
+				 * Komentár od Kosa:
+				 * neviem, čo robí rightUntil,  klepol som tam iba cestu natvrdo, všetko sa vykoná správne, excel prejde, všetky exceptions,
+				 * napr. ak súbor je otvorený alebo neexistuje, je zlá cesta bla bla bla sa vykonajú
+				 * */
+				ExcelReader.readExcel(destination);
+				System.out.println(ExcelReader.getNr());
+			    System.out.println(ExcelReader.getIndex());
 
 //				System.out.println(source);
 //				System.out.println(destination);
