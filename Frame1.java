@@ -199,7 +199,7 @@ public class Frame1 {
 				boolean to = false;
 				whereFilter = "";
 				String[] values = {fromDate.getText(), toDate.getText(), customer.getText(), partNumber.getText(), partPosition.getText(), compositionNumber.getText(), orderNumber.getText()};
-				String[] varNames = {"DateFrom", "DateTo", "Kunde", "Zeichnungsnummer", "Bezeichnung", "zostava", "nrNumber"};
+				String[] varNames = {"Date", "Date", "Kunde", "Zeichnungsnummer", "Bezeichnung", "zostava", "nrNumber"};
 				
 				DateFormat format = new SimpleDateFormat("dd.MM.yyyy");
 				SimpleDateFormat format2 = new SimpleDateFormat("yyyy-MM-dd");
