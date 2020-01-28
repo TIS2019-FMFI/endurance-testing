@@ -72,15 +72,22 @@ public class Frame1 {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				new Frame2(frmMain);
+				new Frame2();
 			}
 			
 		});
 		menuBar.add(mnUploadFile);
 		
-		JMenuItem mnNewMenu = new JMenuItem("LOG");
+		JMenuItem mnLOG = new JMenuItem("LOG");
 		menuBar.setPreferredSize(new Dimension(10, 20));
-		menuBar.add(mnNewMenu);
+		mnLOG.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				new FrameLog();
+			}
+		});
+		menuBar.add(mnLOG);
 		
 		JMenu mnNewMenu_1 = new JMenu("Language");
 		menuBar.add(mnNewMenu_1);

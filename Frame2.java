@@ -41,21 +41,16 @@ public class Frame2 {
 	 * Create the application.
 	 */	
 	public Frame2() {
-		initialize(new JFrame());
-	}
-	
-	public Frame2(JFrame frm) {
-		initialize(frm);
+		initialize();
 	}
 
 	/**
 	 * Initialize the contents of the frame.
 	 */
-	private void initialize(JFrame frm) {
+	private void initialize() {
 		frmVytvorenieStruktury = new JFrame();
 		frmVytvorenieStruktury.setTitle("Vytvorenie struktury");
 		frmVytvorenieStruktury.setSize(600, 400);
-		frmVytvorenieStruktury.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frmVytvorenieStruktury.getContentPane().setLayout(null);
 		
 		JButton button = new JButton("Browse");
@@ -72,9 +67,7 @@ public class Frame2 {
 		btnSubmit.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				new Frame1();
 				frmVytvorenieStruktury.setVisible(false);
-				frm.setVisible(false);
 				
 				submit();
 			}
@@ -145,6 +138,7 @@ public class Frame2 {
 		frmVytvorenieStruktury.getContentPane().add(tZostava);
 		tZostava.setColumns(10);
 		
+		frmVytvorenieStruktury.setResizable(false);
 		frmVytvorenieStruktury.setVisible(true);
 	}
 	
