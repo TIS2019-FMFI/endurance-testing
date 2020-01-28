@@ -6,21 +6,19 @@ import javax.swing.JFileChooser;
 
 import java.awt.event.ActionListener;
 import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
-import java.util.Comparator;
 import java.awt.event.ActionEvent;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 
-
 public class Frame2 {
 
-	private JFrame frame;
+	private JFrame frmVytvorenieStruktury;
 	private JTextField txt;
+	private JTextField tznummer;
+	private JTextField tKunde;
+	private JTextField tBezeichnung;
+	private JTextField tCisloObjednavky;
+	private JTextField tZostava;
 
 	/**
 	 * Launch the application.
@@ -30,7 +28,7 @@ public class Frame2 {
 			public void run() {
 				try {
 					Frame2 window = new Frame2();
-					window.frame.setVisible(true);
+					window.frmVytvorenieStruktury.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -41,8 +39,7 @@ public class Frame2 {
 
 	/**
 	 * Create the application.
-	 */
-	
+	 */	
 	public Frame2() {
 		initialize(new JFrame());
 	}
@@ -55,12 +52,11 @@ public class Frame2 {
 	 * Initialize the contents of the frame.
 	 */
 	private void initialize(JFrame frm) {
-		frame = new JFrame();
-		frame.setTitle("UploadFile");
-		//frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
-		frame.setSize(600, 400);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.getContentPane().setLayout(null);
+		frmVytvorenieStruktury = new JFrame();
+		frmVytvorenieStruktury.setTitle("Vytvorenie struktury");
+		frmVytvorenieStruktury.setSize(600, 400);
+		frmVytvorenieStruktury.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frmVytvorenieStruktury.getContentPane().setLayout(null);
 		
 		JButton button = new JButton("Browse");
 		button.addActionListener(new ActionListener() {
@@ -69,52 +65,102 @@ public class Frame2 {
 					uploadFile();
 				}
 		});
-		button.setBounds(110, 131, 97, 25);
-		frame.getContentPane().add(button);
+		button.setBounds(410, 58, 97, 25);
+		frmVytvorenieStruktury.getContentPane().add(button);
 
 		JButton btnSubmit = new JButton("Submit");
 		btnSubmit.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				new Frame1();
-				frame.setVisible(false);
+				frmVytvorenieStruktury.setVisible(false);
 				frm.setVisible(false);
-
-				String source = txt.getText();
 				
-				@Deprecated // testovacie path
-				String destination = "C:\\Users\\Koso\\Downloads\\AA_477015_11_outer_bush_zaoblene_IT (2).xlsx";// + rightUntil(source, '\\'); // neskor konstanta
-				/*
-				 * Komentár od Kosa:
-				 * neviem, čo robí rightUntil,  klepol som tam iba cestu natvrdo, všetko sa vykoná správne, excel prejde, všetky exceptions,
-				 * napr. ak súbor je otvorený alebo neexistuje, je zlá cesta bla bla bla sa vykonajú
-				 * */
-				ExcelReader.readExcel(destination);
-				System.out.println(ExcelReader.getNr());
-			    System.out.println(ExcelReader.getIndex());
-
-//				System.out.println(source);
-//				System.out.println(destination);
-//				System.out.println(rightUntil(source, '\\'));
-				copyFile(source, destination);
+				submit();
 			}
 		});
-		btnSubmit.setBounds(327, 131, 97, 25);
-		frame.getContentPane().add(btnSubmit);
+		btnSubmit.setBounds(433, 262, 123, 55);
+		frmVytvorenieStruktury.getContentPane().add(btnSubmit);
 		
 		JLabel lblFile = new JLabel("File:");
-		lblFile.setBounds(77, 102, 56, 16);
-		frame.getContentPane().add(lblFile);
+		lblFile.setBounds(51, 62, 56, 16);
+		frmVytvorenieStruktury.getContentPane().add(lblFile);
 		
 		txt = new JTextField();
 		txt.setText("No File selected");
-		txt.setBounds(110, 99, 314, 22);
-		frame.getContentPane().add(txt);
+		txt.setBounds(79, 59, 314, 22);
+		frmVytvorenieStruktury.getContentPane().add(txt);
 		txt.setColumns(10);
 		
-		frame.setVisible(true);
+		JLabel lblAutomatic = new JLabel("Automatic:");
+		lblAutomatic.setBounds(31, 23, 79, 16);
+		frmVytvorenieStruktury.getContentPane().add(lblAutomatic);
+		
+		JLabel lblManual = new JLabel("Manual:");
+		lblManual.setBounds(31, 148, 56, 16);
+		frmVytvorenieStruktury.getContentPane().add(lblManual);
+		
+		JLabel lblNewLabel = new JLabel("Zeichnungsnummer:");
+		lblNewLabel.setBounds(51, 177, 123, 16);
+		frmVytvorenieStruktury.getContentPane().add(lblNewLabel);
+		
+		JLabel lblKunde = new JLabel("Kunde:");
+		lblKunde.setBounds(51, 206, 56, 16);
+		frmVytvorenieStruktury.getContentPane().add(lblKunde);
+		
+		JLabel lblBezeichnung = new JLabel("Bezeichnung:");
+		lblBezeichnung.setBounds(51, 236, 79, 16);
+		frmVytvorenieStruktury.getContentPane().add(lblBezeichnung);
+		
+		tznummer = new JTextField();
+		tznummer.setBounds(186, 174, 173, 22);
+		frmVytvorenieStruktury.getContentPane().add(tznummer);
+		tznummer.setColumns(10);
+		
+		tKunde = new JTextField();
+		tKunde.setBounds(186, 206, 173, 22);
+		frmVytvorenieStruktury.getContentPane().add(tKunde);
+		tKunde.setColumns(10);
+		
+		tBezeichnung = new JTextField();
+		tBezeichnung.setBounds(186, 236, 173, 22);
+		frmVytvorenieStruktury.getContentPane().add(tBezeichnung);
+		tBezeichnung.setColumns(10);
+		
+		JLabel lblCisloObjednavky = new JLabel("Cislo objednavky:");
+		lblCisloObjednavky.setBounds(51, 272, 105, 16);
+		frmVytvorenieStruktury.getContentPane().add(lblCisloObjednavky);
+		
+		JLabel lblZostava = new JLabel("Zostava:");
+		lblZostava.setBounds(51, 301, 56, 16);
+		frmVytvorenieStruktury.getContentPane().add(lblZostava);
+		
+		tCisloObjednavky = new JTextField();
+		tCisloObjednavky.setBounds(186, 266, 173, 22);
+		frmVytvorenieStruktury.getContentPane().add(tCisloObjednavky);
+		tCisloObjednavky.setColumns(10);
+		
+		tZostava = new JTextField();
+		tZostava.setBounds(186, 298, 173, 22);
+		frmVytvorenieStruktury.getContentPane().add(tZostava);
+		tZostava.setColumns(10);
+		
+		frmVytvorenieStruktury.setVisible(true);
 	}
 	
+	private void submit() {
+		String source = txt.getText();
+
+		if (rightUntil(source, '\\').equals(source)) {
+			//new ExcelReader.readExcel(source);
+		} else {
+			//new Produkt(tBezeichnung.getText(),tKunde.getText(),tznummer.getText(), tCisloObjednavky.getText(), DATA_SOURCE, tZostava.getText())
+		}
+	}
+	
+	/**
+	 * Vrati podretaz od posledneho vyskytu zadaneho znaku az po koniec retazca
+	 */
 	private String rightUntil(String ret, Character ch) {
 		StringBuffer sb = new StringBuffer();
 		for (int i = ret.length()-1;i >= 0; i--) {
@@ -129,126 +175,124 @@ public class Frame2 {
 	private void uploadFile() {
 		JFileChooser fileChooser = new JFileChooser();
 		fileChooser.setCurrentDirectory(new File(System.getProperty("user.home")));
-		int result = fileChooser.showOpenDialog(frame);
+		int result = fileChooser.showOpenDialog(frmVytvorenieStruktury);
 		if (result == JFileChooser.APPROVE_OPTION) {
 			File selectedFile = fileChooser.getSelectedFile();
 			
 			txt.setText(selectedFile.getAbsolutePath());
 		}
 	}
-
-	// ---------------------------------------------FILES---------------------------------------------------------------------//
-	private void deleteFile(String filePath) {
-		Path path = Paths.get(filePath);
-		try {
-			Files.delete(path);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
-
-	private void deleteEmptyDirectory(String dirPath) {
-		Path path = Paths.get(dirPath);
-		try {
-			Files.delete(path);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
-
-	private void deleteNonEmptyDirectory(String dirPath) {
-		Path path = Paths.get(dirPath);
-		try {
-			Files.walk(path).sorted(Comparator.reverseOrder()).map(Path::toFile).forEach(File::delete);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
-	}
-
-	private void copyFile(String source, String destination) {
-		Path sourcepath = Paths.get(source);
-		Path destinationepath = Paths.get(destination);
-		try {
-			Files.copy(sourcepath, destinationepath, StandardCopyOption.REPLACE_EXISTING);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
-	}
-
-	private void copyEmptyDirectory(String source, String destination) {
-		Path sourcepath = Paths.get(source);
-		Path destinationepath = Paths.get(destination);
-		try {
-			Files.copy(sourcepath, destinationepath, StandardCopyOption.REPLACE_EXISTING);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
-	}
-
-	private void copyNonEmptyDirectory(String source, String destination) {
-		Path sourcepath = Paths.get(source);
-		Path destinationepath = Paths.get(destination);
-		try {
-			Files.walk(sourcepath)
-					.forEach(s -> copy(s, destinationepath.resolve(sourcepath.relativize(s))));
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
-
-	static void copy(Path source, Path dest) {
-		try {
-			Files.copy(source, dest, StandardCopyOption.REPLACE_EXISTING);
-		} catch (Exception e) {
-			throw new RuntimeException(e.getMessage(), e);
-		}
-	}
-
-	private void moveFile(String source, String destination) {
-		Path sourcepath = Paths.get(source);
-		Path destinationepath = Paths.get(destination);
-
-		try {
-			Files.move(sourcepath, destinationepath, StandardCopyOption.REPLACE_EXISTING);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
-	}
-
-	private void moveEmptyDirectorypublic(String source, String destination) {
-		Path sourcepath = Paths.get(source);
-		Path destinationepath = Paths.get(destination);
-		try {
-			Files.move(sourcepath, destinationepath, StandardCopyOption.REPLACE_EXISTING);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
-	}
-
-	private void moveNonEmptyDirectorypublic(String source, String destination) {
-		Path sourcepath = Paths.get(source);
-		Path destinationepath = Paths.get(destination);
-		try {
-			Files.move(sourcepath, destinationepath, StandardCopyOption.REPLACE_EXISTING);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
-	}
-	// ---------------------------------------------FILES---------------------------------------------------------------------//
-	    
+	
+//	Funkcie na pracu so subormi
+//
+//	private void copyFile(String source, String destination) {
+//		Path sourcepath = Paths.get(source);
+//		Path destinationepath = Paths.get(destination);
+//		try {
+//			Files.copy(sourcepath, destinationepath, StandardCopyOption.REPLACE_EXISTING);
+//		} catch (IOException e) {
+//			e.printStackTrace();
+//		}
+//
+//	}
+//
+//	private void deleteFile(String filePath) {
+//		Path path = Paths.get(filePath);
+//		try {
+//			Files.delete(path);
+//		} catch (IOException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+//	}
+//
+//	private void deleteEmptyDirectory(String dirPath) {
+//		Path path = Paths.get(dirPath);
+//		try {
+//			Files.delete(path);
+//		} catch (IOException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+//	}
+//
+//	private void deleteNonEmptyDirectory(String dirPath) {
+//		Path path = Paths.get(dirPath);
+//		try {
+//			Files.walk(path).sorted(Comparator.reverseOrder()).map(Path::toFile).forEach(File::delete);
+//		} catch (IOException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+//
+//	}
+//
+//	private void copyEmptyDirectory(String source, String destination) {
+//		Path sourcepath = Paths.get(source);
+//		Path destinationepath = Paths.get(destination);
+//		try {
+//			Files.copy(sourcepath, destinationepath, StandardCopyOption.REPLACE_EXISTING);
+//		} catch (IOException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+//
+//	}
+//
+//	private void copyNonEmptyDirectory(String source, String destination) {
+//		Path sourcepath = Paths.get(source);
+//		Path destinationepath = Paths.get(destination);
+//		try {
+//			Files.walk(sourcepath)
+//					.forEach(s -> copy(s, destinationepath.resolve(sourcepath.relativize(s))));
+//		} catch (IOException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+//	}
+//
+//	static void copy(Path source, Path dest) {
+//		try {
+//			Files.copy(source, dest, StandardCopyOption.REPLACE_EXISTING);
+//		} catch (Exception e) {
+//			throw new RuntimeException(e.getMessage(), e);
+//		}
+//	}
+//
+//	private void moveFile(String source, String destination) {
+//		Path sourcepath = Paths.get(source);
+//		Path destinationepath = Paths.get(destination);
+//
+//		try {
+//			Files.move(sourcepath, destinationepath, StandardCopyOption.REPLACE_EXISTING);
+//		} catch (IOException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+//
+//	}
+//
+//	private void moveEmptyDirectorypublic(String source, String destination) {
+//		Path sourcepath = Paths.get(source);
+//		Path destinationepath = Paths.get(destination);
+//		try {
+//			Files.move(sourcepath, destinationepath, StandardCopyOption.REPLACE_EXISTING);
+//		} catch (IOException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+//
+//	}
+//
+//	private void moveNonEmptyDirectorypublic(String source, String destination) {
+//		Path sourcepath = Paths.get(source);
+//		Path destinationepath = Paths.get(destination);
+//		try {
+//			Files.move(sourcepath, destinationepath, StandardCopyOption.REPLACE_EXISTING);
+//		} catch (IOException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+//
+//	}
 }
