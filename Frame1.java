@@ -65,8 +65,7 @@ public class Frame1 {
 		frmMain.setJMenuBar(menuBar);
 		
 		JMenuItem mnUploadFile = new JMenuItem("Vytvorenie struktury");
-		mnUploadFile.setBackground(Color.WHITE);
-		mnUploadFile.setForeground(Color.BLACK);
+		mnUploadFile.setBackground(Color.yellow);
 		mnUploadFile.setPreferredSize(new Dimension(10, 20));
 		mnUploadFile.addActionListener(new ActionListener() {
 
@@ -79,6 +78,7 @@ public class Frame1 {
 		menuBar.add(mnUploadFile);
 		
 		JMenuItem mnLOG = new JMenuItem("LOG");
+		mnLOG.setBackground(Color.cyan);
 		menuBar.setPreferredSize(new Dimension(10, 20));
 		mnLOG.addActionListener(new ActionListener() {
 			

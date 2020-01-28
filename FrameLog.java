@@ -3,6 +3,7 @@ import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JTextArea;
 import javax.swing.JScrollPane;
+import java.awt.Color;
 
 public class FrameLog {
 
@@ -47,6 +48,7 @@ public class FrameLog {
 		frame.getContentPane().add(scrollPane);
 		
 		JTextArea textArea = new JTextArea();
+		textArea.setBackground(Color.WHITE);
 		textArea.setEditable(false);
 		scrollPane.setViewportView(textArea);
 		

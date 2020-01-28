@@ -9,6 +9,7 @@ import java.io.File;
 import java.awt.event.ActionEvent;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
+import java.awt.Color;
 
 public class Frame2 {
 
@@ -49,6 +50,7 @@ public class Frame2 {
 	 */
 	private void initialize() {
 		frmVytvorenieStruktury = new JFrame();
+		frmVytvorenieStruktury.setBackground(Color.WHITE);
 		frmVytvorenieStruktury.setTitle("Vytvorenie struktury");
 		frmVytvorenieStruktury.setSize(600, 400);
 		frmVytvorenieStruktury.getContentPane().setLayout(null);
