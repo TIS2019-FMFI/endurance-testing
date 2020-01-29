@@ -1,9 +1,17 @@
 import java.awt.EventQueue;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
 
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JTextArea;
 import javax.swing.JScrollPane;
 import java.awt.Color;
+import javax.swing.JButton;
+import javax.swing.JFileChooser;
 
 public class FrameLog {
 
@@ -39,7 +47,7 @@ public class FrameLog {
 	 */
 	private void initialize() {
 		frame = new JFrame();
-		frame.setSize(600, 400);
+		frame.setSize(600, 436);
 		frame.setTitle("LOG");
 		frame.getContentPane().setLayout(null);
 		
@@ -54,6 +62,46 @@ public class FrameLog {
 		
 		
 		fakeLogData(textArea);
+		
+		JButton btnExport = new JButton("Export");
+		btnExport.setBounds(458, 366, 102, 25);
+		btnExport.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				JFileChooser fileChooser = new JFileChooser();
+				fileChooser.setDialogTitle("Export file");
+				
+				int userSelection = fileChooser.showSaveDialog(frame);
+				 
+				if (userSelection == JFileChooser.APPROVE_OPTION) {
+				    File fileToSave = fileChooser.getSelectedFile();
+				    
+				    try{
+			            String content = textArea.getText();
+			            String path= fileToSave.getAbsolutePath();
+			            File file = new File(path);
+
+			            if (!file.exists()) {
+			                file.createNewFile();
+			            }
+
+			            FileWriter fw = new FileWriter(file.getAbsoluteFile());
+			            BufferedWriter bw = new BufferedWriter(fw);
+
+			            bw.write(content);
+
+			            bw.close();
+			            
+			            JOptionPane.showMessageDialog(frame, "Successful export to: "+ fileToSave.getAbsolutePath());
+			        }
+			        catch(Exception e1){
+			            System.out.println(e);
+			        }
+				}
+			}
+		});
+		frame.getContentPane().add(btnExport);
 		
 		frame.setResizable(false);
 		frame.setVisible(true);

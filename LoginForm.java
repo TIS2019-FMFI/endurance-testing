@@ -16,6 +16,10 @@ public class LoginForm {
 	public JButton btn1;
 
 	public LoginForm() {
+		initialize();
+	}
+	
+	private void initialize() {
 		JFrame frame = new JFrame("Login");
 		l2 = new JLabel("Username: ");
 		l3 = new JLabel("Password: ");
@@ -35,7 +39,7 @@ public class LoginForm {
 				String uname = t1.getText();
 				String pass = p1.getText();
 				if (uname.equals("admin") && pass.equals("admin")) {
-					new Frame1();
+					new Main();
 					frame.setVisible(false);
 				} else {
 					JOptionPane.showMessageDialog(btn1, "Wrong username or password!", "Error message", JOptionPane.ERROR_MESSAGE);
