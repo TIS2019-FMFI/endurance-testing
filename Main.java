@@ -3,17 +3,33 @@ import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
+
+import java.awt.AWTException;
 import java.awt.Color;
+import java.awt.Dimension;
 
 import javax.swing.JLabel;
+import javax.swing.JList;
+
 import java.awt.Font;
+import java.awt.Robot;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
 
 import javax.swing.JTextField;
-
+import javax.swing.ListSelectionModel;
 import javax.swing.JButton;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
+import javax.swing.JScrollPane;
 import javax.swing.JSeparator;
 import javax.swing.SwingConstants;
 
@@ -42,6 +58,13 @@ public class Main {
 	private JMenuItem mnLOG;
 	private JMenu mnNewMenu_1;
 	private JMenuItem mntmNewMenuItem_2;
+	
+	/*Koso*/
+	private static String whereFilter = "";
+	private JList<?> list;
+	private JScrollPane listScroller;
+	private String[] dataForJlist;
+	private ArrayList<String[]> backData = new ArrayList<String[]>();
 
 	/**
 	 * Launch the application.
@@ -235,21 +258,164 @@ public class Main {
 		separator.setBounds(0, 139, 1920, 2);
 		frmMain.getContentPane().add(separator);
 		frmMain.setVisible(true);
+		
+		/*********************************************************KOSO*********************************************************************/
+		JButton btnBack = new JButton("<<<");
+		btnBack.setBounds(100, 150, 100, 50);
+		frmMain.getContentPane().add(btnBack);
+		
+		JButton btnUpdate = new JButton("Update");
+		btnUpdate.setBounds(250, 150, 100, 50);
+		frmMain.getContentPane().add(btnUpdate);
+		
+		JButton btnDelete = new JButton("Delete");
+		btnDelete.setBounds(360, 150, 100, 50);
+		frmMain.getContentPane().add(btnDelete);
+		
+		JButton btnExport = new JButton("Export");
+		btnExport.setBounds(470, 150, 100, 50);
+		frmMain.getContentPane().add(btnExport);
+		
+		JButton btnImport = new JButton("Import");
+		btnImport.setBounds(580, 150, 100, 50);
+		frmMain.getContentPane().add(btnImport);
+		
+		btnBack.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				
+				Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+				int width = screenSize.width;
+				int height = screenSize.height;
+
+				
+				String[] ar = {"one", "two", "three", "one", "two", "three", "one", "two", "three", "one", "two", "three",
+								"one", "two", "three", "one", "two", "three", "one", "two", "three", "one", "two", "three",
+								"one", "two", "three", "one", "two", "three", "one", "two", "three", "one", "two", "three",
+								"one", "two", "three", "one", "two", "three", "one", "two", "three", "one", "two", "three"};
+				
+				frmMain.getContentPane().remove(listScroller);
+	        	
+	        	list = new JList(ar); 
+	        	
+	    		listScroller = new JScrollPane(list);
+	    		listScroller.setPreferredSize(new Dimension(250, 80));
+	    		listScroller.setBounds(100, 200, width-500, height-300);
+	    		frmMain.getContentPane().add(listScroller);
+	    		frmMain.validate();
+				
+			}
+			
+		});
+		
+		btnUpdate.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				System.out.println("Pressed button: Update    Selected value: " + getSelectedItem());
+			}
+		});
+		
+		btnDelete.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				System.out.println("Pressed button: Delete    Selected value: " + getSelectedItem());
+			}
+		});
+		
+		btnExport.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				System.out.println("Pressed button: Export    Selected value: " + getSelectedItem());
+			}
+		});
+		
+		btnImport.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				System.out.println("Pressed button: Inport    Selected value: " + getSelectedItem());				
+			}
+		});
+		
+		buttonFilter.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				
+				boolean from = false;
+				boolean to = false;
+				whereFilter = "";
+				String[] values = {tFromDate.getText(), tToDate.getText(), tCustomer.getText(), tPartNumber.getText(), tPartPosition.getText(), tCompositionNumber.getText(), tOrderNumber.getText()};
+				String[] varNames = {"Date", "Date", "Kunde", "Zeichnungsnummer", "Bezeichnung", "zostava", "nrNumber"};
+				
+				DateFormat format = new SimpleDateFormat("dd.MM.yyyy");
+				SimpleDateFormat format2 = new SimpleDateFormat("yyyy-MM-dd");
+				
+					
+			    try {
+			    	if (tFromDate.getText().length() != 0) {
+			    		Date datum1 = format.parse(tFromDate.getText());
+			    		values[0] = format2.format(datum1);
+			    		from = true;
+			        }
+			        if (tToDate.getText().length() != 0) {
+			        	format.parse(tToDate.getText());
+			        	Date datum2 = format.parse(tToDate.getText());
+			    		values[1] = format2.format(datum2);
+			        	to = true;
+			        }
+
+			    } catch (ParseException e1) {
+			        JOptionPane.showMessageDialog(null, "Zl√Ω form√°t d√°tumu. Zadajte d√°tum v tvare DD.MM.RRRR");
+			    }
+			    
+				
+				for (int i=0; i < 7; i++) {
+					if (values[i].length() > 0) {
+						if (i == 0 && from) {
+							whereFilter = varNames[i] + " >= " + "'" + values[i] + "'::DATE" + " AND ";
+						}
+						else if (i == 1 && to) {
+							whereFilter = whereFilter + varNames[i] + " <= " + "'" + values[i] + "'" + "::DATE" + " AND ";
+						}
+						else if (i > 1) {
+							whereFilter = whereFilter +  varNames[i] + " = " + "'" + values[i] + "'" + " AND ";
+						}
+					}
+				}
+				
+				if (whereFilter != "") {
+					whereFilter = whereFilter.substring(0, whereFilter.length() - 5);
+				}
+				
+				System.out.println("\"" +  whereFilter + "\"");
+				/*
+				 * Tu sa ma volat DB a potom sa vola createData, to vola makeJList, je to tu kvoli testovaniu
+				 * */
+				makeJList();
+				
+			}
+		});
 	}
 	
 	private void setLanguageSlovak() {
-		lFromDate.setText("D·tum od:");
-		lToDate.setText("D·tum do:");
-		lCustomer.setText("Z·kaznÌk:");
-		lPartNumber.setText("»Ìslo dielu:");
-		lPartPosition.setText("PozÌcia dielu:");
-		lCompositionNumber.setText("»Ìslo zostavy:");
-		lOrderNumber.setText("»Ìslo objedn·vky:");
+		lFromDate.setText("D√°tum od:");
+		lToDate.setText("D√°tum do:");
+		lCustomer.setText("Z√°kazn√≠k:");
+		lPartNumber.setText("√à√≠slo dielu:");
+		lPartPosition.setText("Poz√≠cia dielu:");
+		lCompositionNumber.setText("√à√≠slo zostavy:");
+		lOrderNumber.setText("√à√≠slo objedn√°vky:");
 
-		mnUploadFile.setText("Vytvor ätrukt˙ru");
+		mnUploadFile.setText("Vytvor ≈†trukt√∫ru");
 		mnLOG.setText("LOG");
 		mnNewMenu_1.setText("Jazyk");
-		mntmNewMenuItem_2.setText("Odhl·siù sa");
+		mntmNewMenuItem_2.setText("Odhl√°siÔøΩ sa");
 		
 	}
 	
@@ -267,6 +433,78 @@ public class Main {
 		mnNewMenu_1.setText("Language");
 		mntmNewMenuItem_2.setText("Log out");
 		
+	}
+	
+	/********************************KOSO***************************/
+	
+	public static String getWhereFilter() {
+		return whereFilter;
+	}
+	
+	private String getSelectedItem () {
+		try {
+			String selected = list.getSelectedValue().toString();
+			return selected;
+		} catch (NullPointerException e) {
+			JOptionPane.showMessageDialog(null, "No item selected");
+			return "q";
+		}
+	}
+	
+	private String[] createData () {
+		/*Tu treba adapter na zavolanie DB
+		 * Po kliknuti na tlacitlo FILTER sa vytvori vstup pre WHERE podmienku, ak nie je nic, tak sa da true
+		 * odtial sa nacitaju vsetky produkty a z nich sa vyberie string, ten sa dostane sem a vrati to do Jlistu
+		 * */
+		dataForJlist = null;
+		makeJList();
+		return null;
+	}
+	
+	private void makeJList () {
+		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+		int width = screenSize.width;
+		int height = screenSize.height;
+
+		
+		String[] ar = {"one", "two", "three", "one", "two", "three", "one", "two", "three", "one", "two", "three",
+						"one", "two", "three", "one", "two", "three", "one", "two", "three", "one", "two", "three",
+						"one", "two", "three", "one", "two", "three", "one", "two", "three", "one", "two", "three",
+						"one", "two", "three", "one", "two", "three", "one", "two", "three", "one", "two", "three"};
+		
+		String[] data = {"dokumenty", "testy", "jedna", "tajtrlik"};
+		//ar a data s√∫ len na uk√°≈æku
+		list = new JList(ar); 
+		
+		listScroller = new JScrollPane(list);
+		listScroller.setPreferredSize(new Dimension(250, 80));
+		listScroller.setBounds(100, 200, width-500, height-300);
+		frmMain.getContentPane().add(listScroller);
+		frmMain.repaint();
+		frmMain.validate();
+
+		list.addMouseListener(new MouseAdapter() {
+		    
+			public void mouseClicked(MouseEvent evt) {
+		        list = (JList)evt.getSource();
+		        if (evt.getClickCount() == 2) {
+		        	
+		        	backData.add(ar);
+		        	frmMain.getContentPane().remove(listScroller);
+		        	
+		        	list = new JList(data); 
+		        	
+		    		listScroller = new JScrollPane(list);
+		    		listScroller.setPreferredSize(new Dimension(250, 80));
+		    		listScroller.setBounds(100, 200, width-500, height-300);
+		    		frmMain.getContentPane().add(listScroller);
+		    		frmMain.validate();
+
+		            System.out.println("clicked");
+		            //int index = list.locationToIndex(evt.getPoint());
+		        } 
+		    }
+		});
 	}
 	
 	
