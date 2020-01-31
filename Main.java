@@ -65,6 +65,10 @@ public class Main {
 	private JScrollPane listScroller;
 	private String[] dataForJlist;
 	private ArrayList<String[]> backData = new ArrayList<String[]>();
+	
+	private String noItemSelected = "No item selected";
+	String badDateFormat = "Bad date format. Please enter a date in the form DD.MM.RRRR";
+	String dateIsGreater = "The first date is greater than the second date";
 
 	/**
 	 * Launch the application.
@@ -345,8 +349,7 @@ public class Main {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				// TODO Auto-generated method stub
-				
+			
 				boolean from = false;
 				boolean to = false;
 				whereFilter = "";
@@ -358,33 +361,48 @@ public class Main {
 				
 					
 			    try {
+			    	
+			    	Date datum1 = null;
+			    	Date datum2 = null;
+			    	
 			    	if (tFromDate.getText().length() != 0) {
-			    		Date datum1 = format.parse(tFromDate.getText());
+			    		datum1 = format.parse(tFromDate.getText());
 			    		values[0] = format2.format(datum1);
 			    		from = true;
 			        }
 			        if (tToDate.getText().length() != 0) {
 			        	format.parse(tToDate.getText());
-			        	Date datum2 = format.parse(tToDate.getText());
+			        	datum2 = format.parse(tToDate.getText());
 			    		values[1] = format2.format(datum2);
 			        	to = true;
 			        }
+			        
+			        if ((datum1 != null && datum2 != null) && (datum1.after(datum2))) {
+			        	JOptionPane.showMessageDialog(null, dateIsGreater);
+			        	from = false;
+			        	to = false;
+			        }
 
 			    } catch (ParseException e1) {
-			        JOptionPane.showMessageDialog(null, "Zlý formát dátumu. Zadajte dátum v tvare DD.MM.RRRR");
+			        JOptionPane.showMessageDialog(null, badDateFormat);
 			    }
 			    
 				
 				for (int i=0; i < 7; i++) {
 					if (values[i].length() > 0) {
 						if (i == 0 && from) {
-							whereFilter = varNames[i] + " >= " + "'" + values[i] + "'::DATE" + " AND ";
+							whereFilter = varNames[i] + " >= '" + values[i] + "'::DATE AND ";
 						}
 						else if (i == 1 && to) {
-							whereFilter = whereFilter + varNames[i] + " <= " + "'" + values[i] + "'" + "::DATE" + " AND ";
+							whereFilter = whereFilter + varNames[i] + " <= '" + values[i] + "'::DATE AND ";
 						}
 						else if (i > 1) {
-							whereFilter = whereFilter +  varNames[i] + " = " + "'" + values[i] + "'" + " AND ";
+							if (values[i].contains(",")) {
+								whereFilter = whereFilter + separator(values[i], varNames[i]) + " AND ";
+							}
+							else {
+								whereFilter = whereFilter +  varNames[i] + " = '" + values[i] + "' AND ";
+							}
 						}
 					}
 				}
@@ -417,6 +435,10 @@ public class Main {
 		mnNewMenu_1.setText("Jazyk");
 		mntmNewMenuItem_2.setText("Odhlási� sa");
 		
+		dateIsGreater = "Prvý dátum je väčší ako druhý dátum";
+		badDateFormat = "Zlý formát dátumu. Zadajte dátum v tvare DD.MM.RRRR";
+		noItemSelected = "Nezvolili ste žiadnu zložku/súbor";
+		
 	}
 	
 	private void setLanguageEnglish() {
@@ -433,6 +455,11 @@ public class Main {
 		mnNewMenu_1.setText("Language");
 		mntmNewMenuItem_2.setText("Log out");
 		
+		noItemSelected = "No item selected";
+		badDateFormat = "Bad date format. Please enter a date in the form DD.MM.RRRR";
+		dateIsGreater = "The first date is greater than the second date";
+		
+		
 	}
 	
 	/********************************KOSO***************************/
@@ -446,7 +473,7 @@ public class Main {
 			String selected = list.getSelectedValue().toString();
 			return selected;
 		} catch (NullPointerException e) {
-			JOptionPane.showMessageDialog(null, "No item selected");
+			JOptionPane.showMessageDialog(null, noItemSelected);
 			return "q";
 		}
 	}
@@ -505,6 +532,16 @@ public class Main {
 		        } 
 		    }
 		});
+	}
+	
+	private static String separator(String text, String varName) {
+		String result = "";
+		String[] parts = text.split(",");
+		for (int i = 0; i < parts.length; i++) {
+			result = result + varName + " = '" + parts[i].trim() + "' OR "; 
+		}
+		result = result.substring(0, result.length() - 4);
+		return result;
 	}
 	
 	
