@@ -1,5 +1,6 @@
 package DatabaseConnector;
 
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -19,22 +20,25 @@ public class ProduktFinder {
 	}
 	
 	public List<Produkt> produktFinder(String kunde, String zeichnungsnummer, String bezeichnung, String nr){
-		List<Produkt> zoznam = new ArrayList<Produkt>(); 	
+		List<Produkt> zoznam = new ArrayList<Produkt>(); 
+		Connection c=null;
+		PreparedStatement s = null;
 		try {
-			java.sql.Connection c = dataSource.getConnection();
-			PreparedStatement s = c.prepareStatement("Select * from produkt where Kunde = ? AND Zeichnungsnummer LIKE ? and Bezeichnung = ? and NR = ?");
+			c = dataSource.getConnection();
+			s = c.prepareStatement("Select * from produkt where Kunde = ? AND Zeichnungsnummer = ? and Bezeichnung = ? and NR = ?");
 			s.setString(1, kunde);
 			s.setString(2, zeichnungsnummer);
 			s.setString(3, bezeichnung);
 			s.setString(4, nr);
 			ResultSet rs = s.executeQuery();
 			while (rs.next()) {
-				Produkt p = new Produkt("","","","",dataSource);
+				Produkt p = new Produkt("","","","",dataSource,"");
 				p.setBezeichnung(rs.getString("Bezeichnung"));
 				p.setKunde(rs.getString("Kunde"));
 				p.setZeichnungsnummer(rs.getString("Zeichnungsnummer"));
 				p.setNr(rs.getString("NR"));
 				p.setId(rs.getInt("Id"));
+				p.setZostava(rs.getString("Zostava"));
 				zoznam.add(p); 
 			}
 			return zoznam;
@@ -42,13 +46,19 @@ public class ProduktFinder {
 		catch (SQLException e) {
 			e.printStackTrace();
 		}
-		return null;
+		finally {
+			try { if (s != null) s.close(); } catch (Exception e) {e.printStackTrace() ;}
+			try { if (c != null) c.close(); } catch (Exception e) {e.printStackTrace() ;}
+		}
+		return zoznam;
 	}
 	
 	public Integer produktIDFinder(String kunde, String zeichnungsnummer, String bezeichnung, String nr){
+		Connection c=null;
+		PreparedStatement s = null;
 		try {
-			java.sql.Connection c = dataSource.getConnection();
-			PreparedStatement s = c.prepareStatement("Select Id from produkt where Kunde = ? AND Zeichnungsnummer = ? and Bezeichnung = ? and NR = ?");
+			c = dataSource.getConnection();
+			s = c.prepareStatement("Select Id from produkt where Kunde = ? AND Zeichnungsnummer = ? and Bezeichnung = ? and NR = ?");
 			s.setString(1, kunde);
 			s.setString(2, zeichnungsnummer);
 			s.setString(3, bezeichnung);
@@ -61,6 +71,42 @@ public class ProduktFinder {
 		}
 		catch (SQLException e) {
 			e.printStackTrace();
+		}
+		finally {
+			try { if (s != null) s.close(); } catch (Exception e) {e.printStackTrace() ;}
+			try { if (c != null) c.close(); } catch (Exception e) {e.printStackTrace() ;}
+		}
+		return null;
+	}
+	
+	public List<Produkt> produktAllFinder(String where) {
+		Connection c=null;
+		PreparedStatement s = null;
+		List<Produkt> zoznam = new ArrayList<Produkt>(); 	
+		String sq = "";
+		sq = "Select * from produkt " + where;
+		try {
+			c = dataSource.getConnection();
+			s = c.prepareStatement(sq);
+			ResultSet rs = s.executeQuery();
+			while (rs.next()) {
+				Produkt p = new Produkt("","","","",dataSource,"");
+				p.setBezeichnung(rs.getString("Bezeichnung"));
+				p.setKunde(rs.getString("Kunde"));
+				p.setZeichnungsnummer(rs.getString("Zeichnungsnummer"));
+				p.setNr(rs.getString("NR"));
+				p.setId(rs.getInt("Id"));
+				p.setZostava(rs.getString("Zostava"));
+				zoznam.add(p); 
+			}
+			return zoznam;
+		}
+		catch (SQLException e) {
+			e.printStackTrace();
+		}
+		finally {
+			try { if (s != null) s.close(); } catch (Exception e) {e.printStackTrace() ;}
+			try { if (c != null) c.close(); } catch (Exception e) {e.printStackTrace() ;}
 		}
 		return null;
 	}
