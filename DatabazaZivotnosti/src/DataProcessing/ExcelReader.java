@@ -1,3 +1,4 @@
+package DataProcessing;
 import org.apache.poi.EncryptedDocumentException;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.ss.usermodel.*;
@@ -50,15 +51,15 @@ public class ExcelReader {
 		    		
 		    	}
 		    	catch (FileNotFoundException e) {
-		    		JOptionPane.showMessageDialog(null, "Zadaný súbor sa používa. Zatvorte ho prosím");
+		    		JOptionPane.showMessageDialog(null, "Zadanï¿½ sï¿½bor sa pouï¿½ï¿½va. Zatvorte ho prosï¿½m");
 		    	}
-			} catch (EncryptedDocumentException | InvalidFormatException | IOException e) {
+			} catch (EncryptedDocumentException  | IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		} 
 		else {
-			JOptionPane.showMessageDialog(null, "Zadaný súbor neexistuje");
+			JOptionPane.showMessageDialog(null, "Zadanï¿½ sï¿½bor neexistuje");
 		}
 		
 	}
@@ -85,7 +86,7 @@ public class ExcelReader {
 	
 	public static void main(String[] args) {
 		
-	    readExcel("C:\\Users\\Koso\\Downloads\\AA_477015_11_outer_bush_zaoblene_IT (2).xlsx");
+	    //readExcel("C:\\Users\\Koso\\Downloads\\AA_477015_11_outer_bush_zaoblene_IT (2).xlsx");
 	    System.out.println(getNr());
 	    System.out.println(getIndex());
 	}

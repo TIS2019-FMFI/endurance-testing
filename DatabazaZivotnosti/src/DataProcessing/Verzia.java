@@ -1,5 +1,9 @@
 package DataProcessing;
 
+import java.io.File;
+import java.sql.Date;
+import java.util.List;
+
 import javax.sql.DataSource;
 
 import DatabaseConnector.VerziaInsert;
@@ -9,12 +13,17 @@ public class Verzia {
 	String Verzia;
 	Integer Id_objednavky;
 	DataSource dataSource;
+	Integer Id;
 	
-	public Verzia(String zeichnungsnummer, String verzia, Integer id_objednavky, DataSource datasource) {
+	String ces = "";
+	
+	public Verzia(String zeichnungsnummer, String verzia, Integer id_objednavky, DataSource datasource, String cesta) {
 		Zeichnungsnummer = zeichnungsnummer;
 		Verzia = verzia;
 		Id_objednavky = id_objednavky;
 		dataSource = datasource;
+		
+		ces = cesta;
 		this.pridajVerziu();
 	}
 	
@@ -39,9 +48,41 @@ public class Verzia {
 	
 	public void pridajVerziu() {
 		VerziaInsert pi = new VerziaInsert(dataSource);
-		pi.insert(Zeichnungsnummer, Verzia, Id_objednavky);
+		Id = pi.insert(Zeichnungsnummer, Verzia, Id_objednavky);
+		String cesta = "F:\\Projekt\\" + ces + "\\" + Verzia + "\\";
+		File dok = new File(cesta + "Dokumenty");
+		dok.mkdir();
+		dok = new File(cesta + "Signaly");
+		dok.mkdir();
+		dok = new File(cesta + "Fotodokumentacia");
+		dok.mkdir();
+		dok = new File(cesta + "Iteracia");
+		dok.mkdir();
+		dok = new File(cesta + "Program");
+		dok.mkdir();
+		
+		cesta = "F:\\Projekt\\" + ces + "\\" + Verzia + "\\" + "Signaly" + "\\";
+		dok = new File(cesta + "Originalny");
+		dok.mkdir();
+		dok = new File(cesta + "Editovany");
+		dok.mkdir();
 	}
 	
+	public void nahrajSubor(String filename, String cesta, String user) {
+		String[] nazov = filename.split(".");
+		VerziaInsert pi = new VerziaInsert(dataSource);
+		pi.insertFile(nazov[0],"", nazov[1], cesta, user, Verzia);
+	}
+	
+	public void nahrajSignal(String filename, String signal) {
+		String[] nazov = filename.split(".");
+		VerziaInsert pi = new VerziaInsert(dataSource);
+		
+	}
+	public void nastavDatumTestovania(Date datum) {
+		VerziaInsert pi = new VerziaInsert(dataSource);
+		pi.insertDate(Zeichnungsnummer, datum, Id);
+	}
 	/*
 	 * Vytvori sa 
 	 * */
