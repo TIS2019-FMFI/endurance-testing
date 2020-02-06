@@ -11,8 +11,13 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.sql.DataSource;
+
+import DataProcessing.Log;
+import DataProcessing.Produkt;
 
 public class LogInsert {
 	private DataSource dataSource;
@@ -21,12 +26,6 @@ public class LogInsert {
 		dataSource = datasource;
 	}
 	
-	public String getUser() {
-		HttpClient client = HttpClient.newHttpClient();
-		Builder builder = HttpRequest.newBuilder().GET().uri(URI.create("http://localhost:8080/DatabazaZivotnosti/rest/data/allprodukt"));
-		HttpRequest request = builder.build();
-		return "";
-	}
 	
 	public Integer insert(String user, String what,  String how){
 		Connection c=null;
@@ -41,7 +40,7 @@ public class LogInsert {
 			st.executeUpdate();
 			try (ResultSet r = st.getGeneratedKeys()) {
                 r.next();
-                return r.getInt(3);
+                return r.getInt(1);
             }
 		}
 		catch (SQLException e) {
@@ -53,4 +52,32 @@ public class LogInsert {
 		}
 		return -99;
 	}
+	
+	public List<Log> logFinder(){
+		List<Log> zoznam = new ArrayList<Log>(); 
+		Connection c=null;
+		PreparedStatement s = null;
+		try {
+			c = dataSource.getConnection();
+			s = c.prepareStatement("Select * from log");
+			ResultSet rs = s.executeQuery();
+			while (rs.next()) {
+				Log p = new Log("","","","");
+				p.setUser(rs.getString("User"));
+				p.setUpdated_how(rs.getString("Updated_how"));
+				p.setUpdated_at(rs.getString("Updated_at"));
+				p.setUpdated_what(rs.getString("Updated_what"));
+				zoznam.add(p); 
+			}
+			return zoznam;
+		}
+		catch (SQLException e) {
+			e.printStackTrace();
+		}
+		finally {
+			try { if (s != null) s.close(); } catch (Exception e) {e.printStackTrace() ;}
+			try { if (c != null) c.close(); } catch (Exception e) {e.printStackTrace() ;}
+		}
+		return zoznam;
+	} 
 }
