@@ -9,24 +9,48 @@ import javax.sql.DataSource;
 import DatabaseConnector.VerziaInsert;
 
 public class Verzia {
-	String Zeichnungsnummer; //seriove cislo
+	String Zeichnungsnummer;
 	String Verzia;
 	Integer Id_objednavky;
 	DataSource dataSource;
 	Integer Id;
 	
 	String ces = "";
+	Date datum_testovania;
 	
-	public Verzia(String zeichnungsnummer, String verzia, Integer id_objednavky, DataSource datasource, String cesta) {
+	public Date getDatum_testovania() {
+		return datum_testovania;
+	}
+
+
+	public void setDatum_testovania(Date datum_testovania) {
+		this.datum_testovania = datum_testovania;
+	}
+
+
+	String User = "";
+	public Verzia(String zeichnungsnummer, String verzia, Integer id_objednavky, DataSource datasource, String cesta, String user) {
 		Zeichnungsnummer = zeichnungsnummer;
 		Verzia = verzia;
 		Id_objednavky = id_objednavky;
 		dataSource = datasource;
 		
 		ces = cesta;
-		this.pridajVerziu();
+		User = user;
+		
 	}
 	
+	
+	public String getUser() {
+		return User;
+	}
+
+
+	public void setUser(String user) {
+		User = user;
+	}
+
+
 	public String getZeichnungsnummer() {
 		return Zeichnungsnummer;
 	}
@@ -48,8 +72,8 @@ public class Verzia {
 	
 	public void pridajVerziu() {
 		VerziaInsert pi = new VerziaInsert(dataSource);
-		Id = pi.insert(Zeichnungsnummer, Verzia, Id_objednavky);
-		String cesta = "F:\\Projekt\\" + ces + "\\" + Verzia + "\\";
+		Id = pi.insert(Zeichnungsnummer, Verzia, Id_objednavky,User);
+		String cesta = ces + "\\" + Verzia + "\\";
 		File dok = new File(cesta + "Dokumenty");
 		dok.mkdir();
 		dok = new File(cesta + "Signaly");
@@ -61,7 +85,7 @@ public class Verzia {
 		dok = new File(cesta + "Program");
 		dok.mkdir();
 		
-		cesta = "F:\\Projekt\\" + ces + "\\" + Verzia + "\\" + "Signaly" + "\\";
+		cesta = ces + "\\" + Verzia + "\\" + "Signaly" + "\\";
 		dok = new File(cesta + "Originalny");
 		dok.mkdir();
 		dok = new File(cesta + "Editovany");
@@ -81,9 +105,19 @@ public class Verzia {
 	}
 	public void nastavDatumTestovania(Date datum) {
 		VerziaInsert pi = new VerziaInsert(dataSource);
-		pi.insertDate(Zeichnungsnummer, datum, Id);
+		pi.insertDate(Zeichnungsnummer, datum, Id, User);
 	}
-	/*
-	 * Vytvori sa 
-	 * */
+
+	public Integer getId() {
+		return Id;
+	}
+
+
+	public void setId(Integer id) {
+		Id = id;
+	}
+	
+	public String getCesta() {
+		return ces + "\\" + Verzia;
+	}
 }
