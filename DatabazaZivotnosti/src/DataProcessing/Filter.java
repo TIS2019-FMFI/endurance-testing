@@ -37,7 +37,7 @@ public class Filter {
 		dataSource = datasource;
 	} 
 
-	public List<Produkt> vytvorWhere() {
+	public List<HashMap<String, String>> vytvorWhere() {
 		DateFormat format = new SimpleDateFormat("dd.MM.yyyy");
 		SimpleDateFormat format2 = new SimpleDateFormat("yyyy-MM-dd");			
 		Boolean from = false;
@@ -67,15 +67,15 @@ public class Filter {
 	    	return null;
 	        //JOptionPane.showMessageDialog(null, badDateFormat);
 	    }
-	    String[] varNames = {"FromDate", "ToDate", "Kunde", "Zeichnungsnummer", "Bezeichnung", "zostava", "nrNumber"};
+	    String[] varNames = {"FromDate", "ToDate", "p.Kunde", "v.Zeichnungsnummer", "p.Bezeichnung", "p.zostava", "p.nrNumber"};
  		String[] values = {FromDate, ToDate, Kunde, Zeichnungsnummer, Bezeichnung, zostava, nrNumber};
  		for (int i=0; i < 7; i++) {
 			if (values[i].length() > 0) {
 				if (i == 0 && from) {
-					whereFilter = "FromDate" + " >= '" + values[i] + "'::DATE AND ";
+					whereFilter = "v.Datum_testovania" + " >= '" + values[i] + "'::DATE AND ";
 				}
 				else if (i == 1 && to) {
-					whereFilter +=  "ToDate" + " <= '" + values[i] + "'::DATE AND ";
+					whereFilter +=  "v.Datum_testovania" + " <= '" + values[i] + "'::DATE AND ";
 				}
 				else if (i > 1) {
 					if (values[i].contains(",")) {
@@ -90,7 +90,7 @@ public class Filter {
  		String pom = "";
 		if (whereFilter != "") {
 			whereFilter = whereFilter.substring(0, whereFilter.length() - 5);
-			pom = "Where " + whereFilter;
+			pom = " Where " + whereFilter;
 		}
 		
 		ProduktFinder pf = new ProduktFinder(dataSource);

@@ -1,12 +1,13 @@
 package DataProcessing;
-import org.apache.poi.EncryptedDocumentException;
-import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
-import org.apache.poi.ss.usermodel.*;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
 import javax.swing.JOptionPane;
+
+import org.apache.poi.EncryptedDocumentException;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 
 public class ExcelReader {
@@ -37,17 +38,19 @@ public class ExcelReader {
 	}
 	
 	private static void doReadExcel() {
-		
 		if (fileExist()) {	
 		    try {	
 		    	try {
-		    		Workbook workbook = WorkbookFactory.create(file);
+		    		//Workbook workbook = WorkbookFactory.create(file);
+		    		XSSFWorkbook tab = null;
+		    		FileInputStream file = new FileInputStream(filePath);
+		    		tab = new XSSFWorkbook(file);
 					
-					kunde = workbook.getSheetAt(0).getRow(2).getCell(0).toString();
-					bezeichnung = workbook.getSheetAt(0).getRow(2).getCell(3).toString();
-					zeichnungsnummer = workbook.getSheetAt(0).getRow(2).getCell(6).toString();
-					nr = workbook.getSheetAt(0).getRow(0).getCell(1).toString();
-					index = workbook.getSheetAt(0).getRow(0).getCell(3).toString();
+					kunde = tab.getSheetAt(0).getRow(2).getCell(0).toString();
+					bezeichnung = tab.getSheetAt(0).getRow(2).getCell(3).toString();
+					zeichnungsnummer = tab.getSheetAt(0).getRow(2).getCell(6).toString();
+					nr = tab.getSheetAt(0).getRow(0).getCell(1).toString();
+					index = tab.getSheetAt(0).getRow(0).getCell(3).toString();
 		    		
 		    	}
 		    	catch (FileNotFoundException e) {
@@ -59,7 +62,7 @@ public class ExcelReader {
 			}
 		} 
 		else {
-			JOptionPane.showMessageDialog(null, "Zadan� s�bor neexistuje");
+			//JOptionPane.showMessageDialog(null, "Zadan� s�bor neexistuje");
 		}
 		
 	}

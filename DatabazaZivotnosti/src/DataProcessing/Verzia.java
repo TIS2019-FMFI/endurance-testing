@@ -103,11 +103,7 @@ public class Verzia {
 		VerziaInsert pi = new VerziaInsert(dataSource);
 		
 	}
-	public void nastavDatumTestovania(Date datum) {
-		VerziaInsert pi = new VerziaInsert(dataSource);
-		pi.insertDate(Zeichnungsnummer, datum, Id, User);
-	}
-
+	
 	public Integer getId() {
 		return Id;
 	}
