@@ -1,0 +1,64 @@
+body{
+	font-size: 1.1vw;
+}
+
+input{
+	padding: 0.3vw;
+}
+
+label{
+	padding: 0.6vw;
+}
+
+.center {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  width: 20%;
+}
+
+.bottom-space{
+	padding-bottom: 5vw;
+}
+
+.spodok{
+	position: absolute;
+	bottom: 1vw;
+}
+
+#nastavDatum {
+	background: #ff1a1a;
+	position: absolute;
+	top: 50%;
+	right: 50%;
+	visibility: hidden;
+}
+
+td.details-control {
+    background: black;
+    cursor: pointer;
+}
+ 
+tr.shown td.details-control {
+    background: red;
+}
+ 
+div.slider {
+    display: none;
+}
+ 
+table.dataTable tbody td.no-padding {
+    padding: 0;
+}
+
+.searchResult {
+	visibility: hidden;
+	display: none;
+}
+
+.settery{
+	display: none;
+	position: absolute;
+	top: 5%;
+	left: 25%;
+}

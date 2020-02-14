@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>
+			Databáza životnosti
+		</title>
+		<link rel="icon" href="./images/icon.png">
+		<link rel="stylesheet" type="text/css" href="css.css">
+		<script type="text/javascript" src="functions.js"></script>
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+	</head>
+	<body>
+		<h1 align="center">Pridaj nový produkt alebo verziu</h1>
+		
+		<div class="container-fluid">
+			<div class="row">
+				<div class="col">
+					<div class="row">
+						<form action="main-screen.html">
+							<button type="submit">Filter</button>
+						</form>
+						<form action="new-product.html">
+							<button type="submit">Pridať produkt</button>
+						</form>
+
+						<form action="log.html">
+							<button type="submit">Log</button>
+						</form>
+					</div>
+				</div>
+				<div class="col">
+					<form action="index.html" align="right">
+						<button type="submit">Odhlásiť</button>
+					</form>
+				</div>
+			</div>
+		</div>
+		<br><br>
+		
+		<div class="container w-20">
+			<div class="row">
+				<div class="col" align="center">
+					<form action="" method="post" enctype="multipart/form-data" onsubmit="return fillData();">
+						Zvoľte excel pre pridanie nového produktu <br><br><br>
+						<input type="file" name="excel" id="excel"> <br>
+						<input type="submit" value="Nahraj excel" name="submit">
+					</form>
+				</div>
+			</div>
+		<div>
+			<!--						<input type="submit" value="Pridaj produkt" name="submit"> -->
+		<br><br><br><br><br>
+		<div class="container w-50">
+			<form action="" method="post" enctype="multipart/form-data" onsubmit="return newProduct();">
+				<div class="row">
+					<div class="col" align="center">
+						<label for="cisloObjedavkyGet">Číslo objednávky *</label>
+					</div>
+					<div class="col" align="center">
+						<input type="text" id="cisloObjedavkyGet" name="cislo" placeholder="" required>
+					</div>
+				</div>
+				
+				<div class="row">
+					<div class="col" align="center">
+						<label for="cisloVykresuGet">Číslo výkresu *</label>
+					</div>
+					<div class="col" align="center">
+						<input type="text" id="cisloVykresuGet" name="Zeichnungsnummer" placeholder="" required>
+					</div>
+				</div>
+				
+				<div class="row">
+					<div class="col" align="center">
+						<label for="zakaznikGet">Zákazník *</label>
+					</div>
+					<div class="col" align="center">
+						<input type="text" id="zakaznikGet" name="Kunde" placeholder="" required>
+					</div>
+				</div>
+				
+				<div class="row">
+					<div class="col" align="center">
+						<label for="umiestnenieGet">Umiestnenie *</label>
+					</div>
+					<div class="col" align="center">
+						<input type="text" id="umiestnenieGet" name="Bezeichnung" placeholder="" required>
+					</div>
+				</div>
+				
+				<div class="row">
+					<div class="col" align="center">
+						<label for="zostavaGet">Zostava</label>
+					</div>
+					<div class="col" align="center">
+						<input type="text" id="zostavaGet" name="Zostava" placeholder="">
+					</div>
+				</div>
+				
+				<!--<div class="row">
+					<div class="col" align="center">
+						<label for="datumTestovaniaGet">Dátum</label>
+					</div>
+					<div class="col" align="center">
+						<input type="date" id="datumTestovaniaGet" name="datumTestovaniaGet" placeholder="">
+					</div>
+				</div>-->
+				
+				<div class="row">
+					<div class="col" align="center">
+						<input type="submit" value="Pridaj produkt/verziu" name="submit">
+					</div>
+				</div>
+				<br><br><br><br>
+				<div class="row">
+					<div class="col" align="center">
+						Atribúty označené <b>*</b>  sú povinné.
+					</div>
+				</div>
+				
+			</form>
+		</div>
+	</body>
+</html>
