@@ -104,18 +104,19 @@ public class VerziaInsert {
 		}
 	}
 	
-	public void insertDate(String nazov, Date datum, Integer id, String user) {
+	public void insertDate( java.util.Date datum, String id, String user) {
 		Connection c = null;
 		PreparedStatement st = null;	
 		try{
+			
 			c = dataSource.getConnection();
-			st = c.prepareStatement("UPDATE verzia Datum_testovania = ? Where id = ?", Statement.RETURN_GENERATED_KEYS);
-			st.setDate(1, datum);
-			st.setInt(2, id);
+			st = c.prepareStatement("UPDATE verzia SET Datum_testovania = ? Where Zeichnungsnummer = ?", Statement.RETURN_GENERATED_KEYS);
+			st.setDate(1, new Date(datum.getTime()));
+			st.setString(2, id);//Integer.parseInt(id));
 			st.executeUpdate();
 			
 			LogInsert li = new LogInsert(dataSource);
-			li.insert(user,  nazov, "nastavenie datumu");
+			//li.insert(user,  findById(Integer.parseInt(id)), "nastavenie datumu");
 			
 			try (ResultSet r = st.getGeneratedKeys()) {
                 r.next();
@@ -130,15 +131,16 @@ public class VerziaInsert {
 		}
 	}
 	
-	public void insertSignal(String file, String signal, String verzia, String user) {
+	public void insertSignal(String file, String signal, String verzia, String user, String cesta) {
 		Connection c = null;
 		PreparedStatement st = null;
 		try{
 			c = dataSource.getConnection();
-			st = c.prepareStatement("Insert into signaly (verzia, signal, subor) values (?,?,?)", Statement.RETURN_GENERATED_KEYS);
+			st = c.prepareStatement("Insert into signaly (verzia, signal, subor, cesta) values (?,?,?,?)", Statement.RETURN_GENERATED_KEYS);
 			st.setString(1, verzia);
 			st.setString(2, signal);
 			st.setString(3, file);
+			st.setString(4, cesta);
 			st.executeUpdate();
 			try (ResultSet r = st.getGeneratedKeys()) {
                 r.next();
@@ -181,5 +183,28 @@ public class VerziaInsert {
 			try { if (c != null) c.close(); } catch (Exception e) {e.printStackTrace() ;}
 		}
 		return zoznam;
+	}
+	
+	public String findById(Integer id) {
+		Connection c = null;
+		PreparedStatement st = null;
+		try{
+			c = dataSource.getConnection();
+			st = c.prepareStatement("Select Zeichnungsnummer from verzia Where Id = ?", Statement.RETURN_GENERATED_KEYS);
+			st.setInt(1, id);
+			ResultSet rs = st.executeQuery();
+			while (rs.next()) {
+				return rs.getString("Zeichnungsnummer");
+			}
+			return "";
+		}
+		catch (SQLException e) {
+			e.printStackTrace();
+		}
+		finally {
+			try { if (st != null) st.close(); } catch (Exception e) {e.printStackTrace() ;}
+			try { if (c != null) c.close(); } catch (Exception e) {e.printStackTrace() ;}
+		}
+		return "";
 	}
 }

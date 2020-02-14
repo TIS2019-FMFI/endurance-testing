@@ -44,6 +44,31 @@ public class FileFinder {
 		return "";
 	}
 	
+	public String signalFinder(String nazov, String verzia){
+		Connection c=null;
+		PreparedStatement s = null;
+		try {
+			c = dataSource.getConnection();
+			s = c.prepareStatement("Select Cesta from signaly where Subor = ? AND Verzia = ? ");
+			s.setString(1, nazov);
+			s.setString(2, verzia);
+			ResultSet rs = s.executeQuery();
+			while (rs.next()) {
+				return rs.getString(1) + "\\" +nazov; 
+			}
+			return "";
+		}
+		catch (SQLException e) {
+			e.printStackTrace();
+		}
+		finally {
+			try { if (s != null) s.close(); } catch (Exception e) {e.printStackTrace() ;}
+			try { if (c != null) c.close(); } catch (Exception e) {e.printStackTrace() ;}
+		}
+		return "";
+	}
+	
+	
 	public List<Dokument> fileFinderByType(String typ, String verzia){
 		List<Dokument> zoznam = new ArrayList<Dokument>();
 		Connection c=null;
@@ -91,7 +116,6 @@ public class FileFinder {
 				dok.setVerzia(rs.getInt("Verzia"));
 				zoznam.add(dok); 
 			}
-			System.out.println(zoznam);
 			return zoznam;
 		}
 		catch (SQLException e) {

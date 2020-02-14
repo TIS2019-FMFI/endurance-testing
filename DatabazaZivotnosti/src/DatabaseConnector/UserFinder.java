@@ -44,4 +44,3 @@ public class UserFinder {
 		return p != 0;
 	}
 	} 
-

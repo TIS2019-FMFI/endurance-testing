@@ -107,7 +107,7 @@ public class Produkt {
 
 	public void nacitajStrukturu() throws IOException {
 		if (existuje()) {
-			File file = new File("C:\\Users\\Efko\\Desktop\\tis\\cesta.txt");
+			File file = new File("C:\\Users\\Koso\\Desktop\\tisT\\cesta.txt");
 			BufferedReader br;
 			try {
 				br = new BufferedReader(new FileReader(file));
@@ -139,7 +139,7 @@ public class Produkt {
 
 	public void vytvorStrukturu() throws IOException {
 		this.insert(Kunde, Zeichnungsnummer, Bezeichnung, Nr, Zostava);
-		File file = new File("C:\\Users\\Efko\\Desktop\\tis\\cesta.txt");
+		File file = new File("F:\\EnduranceTesting\\Server222\\wildfly-18.0.1.Final\\welcome-content\\BOGE\\cesta.txt");
 		BufferedReader br;
 		try {
 			br = new BufferedReader(new FileReader(file));
