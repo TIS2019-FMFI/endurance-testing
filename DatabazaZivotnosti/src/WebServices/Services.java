@@ -319,7 +319,6 @@ public class Services {
 		//System.out.println(uploadedInputStream);
 		return Response.status(200).entity("File saved to " + uploadedFileLocation).build();
 	}
-
 	private void saveToFile(InputStream inStream, String target) throws IOException {
 		OutputStream out = null;
 		int read = 0;
@@ -331,7 +330,6 @@ public class Services {
 		out.flush();
 		out.close();
 	}
-
 	private void createFolderIfNotExists(String dirName) throws SecurityException {
 		File theDir = new File(dirName);
 		if (!theDir.exists()) {
@@ -404,8 +402,3 @@ public class Services {
 	
 	}
 }
-
-
-/*
- * Pouzivat POST ked prijimam subor/data GET ked nieco vraciam
- */
