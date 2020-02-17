@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+	<head>
+			<title>
+				Login
+			</title>
+			<meta charset="UTF-8">
+			<script type="text/javascript" src="functions.js"></script>
+		<link rel="icon" href="./images/icon.png">
+		<link rel="stylesheet" type="text/css" href="css.css">
+		<link rel="stylesheet" type="text/css" href="jquery.dataTables.min.css">
+		<link rel="stylesheet" type="text/css" href="jquery.dataTables.min.css">
+		
+		<script type="text/javascript" src="jquery-3.4.1.min.js"></script>
+		<script type="text/javascript" src="jquery.dataTables.min.js"></script>
+		<script type="text/javascript" src="./bootstrap/js/bootstrap.min.js"></script>
+		
+		<link rel="stylesheet" href="./bootstrap/css/bootstrap.min.css">
+		</head>
+	<body>
+		<script type="text/javascript">	
+			document.addEventListener("DOMContentLoaded", function() {
+			  checkUser();
+			});	<script type="text/javascript">	
+			document.addEventListener("DOMContentLoaded", function() {
+			  checkUser();
+			});	
+		</script>
+		<div class="center bottom-space" >
+			<img src="./images/logo.png">
+			<br>
+			<h1 align="center">Databáza životnosti</h2>
+		</div>
+		
+		<form method="post" onsubmit="return login();">
+			<div class="center" align="center">
+				<label for="uname">
+					<b>Meno:&nbsp </b>
+				</label>
+				<input type="text" placeholder="meno" name="uname" id="uname"required>
+				<br>
+				
+				<label for="psw">
+					<b>Heslo:&nbsp </b>
+				</label>
+				<input type="password" placeholder="heslo" name="psw" id="psw"required>
+				<br>
+				<button type="submit">Prihlásiť</button>
+			</div>
+		</form>
+		<div class="spodok">
+			<h6>Ak ste zabudli svoje prihlasovacie meno alebo heslo, kontaktujte svojho správcu.</h6>
+		<div>
+		
+		<?php
+			// Starting session
+			session_start();
+			$_SESSION["firstname"] = $_GET['uname'];
+		?>
+	</body>
+</html>
