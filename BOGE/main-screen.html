@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>
+			Databáza životnosti
+		</title>
+		<script type="text/javascript" src="functions.js"></script>
+		<link rel="icon" href="./images/icon.png">
+		<link rel="stylesheet" type="text/css" href="css.css">
+		<link rel="stylesheet" type="text/css" href="jquery.dataTables.min.css">
+		<link rel="stylesheet" type="text/css" href="jquery.dataTables.min.css">
+		
+		<script type="text/javascript" src="jquery-3.4.1.min.js"></script>
+		<script type="text/javascript" src="jquery.dataTables.min.js"></script>
+		<script type="text/javascript" src="./bootstrap/js/bootstrap.min.js"></script>
+		
+		<link rel="stylesheet" href="./bootstrap/css/bootstrap.min.css">
+		
+		<!--<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">-->
+		<!--<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>-->
+		<!--<!--<script src="https://code.jquery.com/jquery-3.4.1.min.js" crossorigin="anonymous"></script>-->
+		<!--<script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js" crossorigin="anonymous"></script>-->
+		<!--<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.20/css/jquery.dataTables.min.css">-->
+	
+		<script type="text/javascript">	
+			document.addEventListener("DOMContentLoaded", function() {
+			  checkUser();
+			});		
+		$(function() {			 
+			var storedAjaxResult;
+			var resultDataTable;
+			var clickedRow;
+			var resultDataTable1;
+			var produkt;
+			var verzia;
+		
+			$( "#Form1SubmitButton" ).click(function() {
+				if (resultDataTable != null){
+					resultDataTable.destroy();
+				}
+				
+				/*if (document.getElementById("searchResult") == null){
+					var element = document.getElementById("searchResult"); 
+					element.parentNode.append(element);
+				}*/
+				document.getElementById("searchResult").style.visibility = "visible"; 
+				
+				
+				$.ajax({
+				  method: "POST",
+				  url: "http://localhost:8080/TesticekNatentoTyzdnicek/rest/data/allprodukt",
+				  data: {
+						FromDate: $( "#datumOd" ).val(),
+						ToDate: $( "#datumDo" ).val(),
+						Zeichnungsnummer: $( "#cisloDielu" ).val().substring(0,15),
+						Kunde: $( "#zakaznik" ).val(),
+						Bezeichnung: $( "#umiestnenieDielu" ).val(),
+						zostava: $( "#cisloZostavy" ).val(), 
+						nrNumber: $( "#cisloObjednavky" ).val()
+						}
+				})
+				  .done(function( msg ) {
+					storedAjaxResult = msg;
+					
+					var JSONString = jQuery.parseJSON(JSON.stringify(msg));
+					resultDataTable = $('#zoznamProduktov').DataTable( {
+						data: JSONString,
+						columns: [
+
+						{ "data": "p\\.Zeichnungsnummer" },
+						{ "data": "Kunde" },
+						{ "data": "Bezeichnung" },
+						{ "data": "NR" },
+						{ "data": "Zostava" }
+						],							
+					});
+				});
+				
+				var clickedRow = $('#zoznamProduktov').on( 'click', 'tr', function () {
+					
+					var tr = $(this).closest('tr');
+					var row = resultDataTable.row( $(this) ).data();
+
+					if (row != null){
+						produkt = row["p.Zeichnungsnummer"];
+						var tmp = row["p.Zeichnungsnummer"];
+						
+						//////////////////Verzie/////////////////////
+						//resultDataTable.destroy();
+						/*var element = document.getElementById("searchResult"); 
+						element.parentNode.removeChild(element);*/
+						
+						document.getElementById("searchResult1").style.visibility = "visible"; 
+						$.ajax({
+						  method: "POST",
+						  url: "http://localhost:8080/TesticekNatentoTyzdnicek/rest/data/verzie",
+						  data: {
+								zeich: tmp
+								}
+						})
+						  .done(function( msg1 ) {
+							
+							var JSONString1 = jQuery.parseJSON(JSON.stringify(msg1));
+							
+							if (resultDataTable1 != null){
+								resultDataTable1.destroy();
+							}
+							
+							resultDataTable1 = $('#zoznamProduktov1').DataTable( {//location.reload(true)
+								data: JSONString1,
+								columns: [
+
+								{ "data": "zeichnungsnummer" },
+								{ "data": "verzia" },
+								{ "data": "datum_testovania" }
+								],							
+							});
+						});
+						
+						var clickedRow1 = $('#zoznamProduktov1').on( 'click', 'tr', function () {
+					
+						var tr = $(this).closest('tr');
+						var row = resultDataTable1.row( $(this) ).data();
+
+						if (row != null){
+							var tmp = row["zeichnungsnummer"];
+							verzia = row["verzia"];
+							setActualRow(tmp);
+							showSetters();
+						}
+					 });
+					}
+				});
+				 
+				 $( "#zoznamProduktov1" ).dblclick(function() {
+					  hideSetters();
+					  
+					$.ajax({
+					  method: "POST",
+					  url: "http://localhost:8080/TesticekNatentoTyzdnicek/rest/data/openFolder",
+					  data: {
+							produkt: produkt,
+							verzia: verzia
+							}
+					})
+					  
+				});
+			});
+		});	
+		</script>
+	</head>
+	<body>
+		<div align="center">
+			<h1> Prehľad dielov a ich verzií </h1>
+		</div>
+		<div class="container-fluid">
+			<div class="row">
+				<div class="col">
+					<div class="row">
+						<form action="main-screen.html">
+							<button type="submit">Filter</button>
+						</form>
+						<form action="new-product.html">
+							<button type="submit">Pridať produkt</button>
+						</form>
+
+						<form action="log.html">
+							<button type="submit">Log</button>
+						</form>
+					</div>
+				</div>
+				<div class="col">
+					<form action="index.html" align="right">
+						<button type="submit">Odhlásiť</button>
+					</form>
+				</div>
+			</div>
+		</div>
+		<br><br>
+		
+		<div class="container-fluid border border-primary">
+			<h3 align="center">Filter</h3>
+			
+				<div class="row">
+					 <div class="col">
+						<label for="datumOd">Dátum od</label>
+						<input type="date" id="datumOd" name="datumOd" placeholder="">
+					</div>
+					<div class="col">
+						<label for="datumDo">Dátum do</label>
+						<input type="date" id="datumDo" name="datumDo" placeholder="">
+					</div>
+					<div class="col">
+						<label for="cisloDielu">Číslo dielu</label>
+						<input type="text" id="cisloDielu" name="cisloDielu" placeholder="xxx.xxx.xxx.xxx">
+					</div>
+					<div class="col">
+						<label for="zakaznik">Zákazník</label>
+						<input type="text" id="zakaznik" name="zakaznik" placeholder="">
+					</div>
+				</div>
+				<div class="row">
+					 <div class="col">
+						<label for="umiestnenieDielu">Umiestnenie dielu</label>
+						<input type="text" id="umiestnenieDielu" name="umiestnenieDielu" placeholder="">
+					</div>
+					<div class="col">
+						<label for="cisloZostavy">Číslo zostavy</label>
+						<input type="text" id="cisloZostavy" name="cisloZostavy" placeholder="">
+					</div>
+					<div class="col">
+						<label for="cisloObjednavky">Číslo objednávky</label>
+						<input type="text" id="cisloObjednavky" name="cisloObjednavky" placeholder="">
+					</div>
+					<div class="col">
+						
+						<button id="Form1SubmitButton" >Hľadať</button>
+						<button onClick="history.go(0)">Nové hľadanie</button>
+
+						
+					</div>
+				</div>
+		</div>
+		
+		
+		<div id="searchResult" visibility = "hidden" display = "none">
+			<center><h3>Produkty</h3></center>
+			<table id="zoznamProduktov" style="width:100%">
+				<thead>
+					<tr>
+						<th scope="col">Číslo dielu</th>
+						<th scope="col">Zákazník</th>
+						<th scope="col">Umiestnenie</th>
+						<th scope="col">Číslo objednávky</th>
+						<th scope="col">Zostava</th>
+					</tr>
+				</thead>
+			</table>
+			<hr>
+		</div>
+		
+		<div id="searchResult1" visibility = "hidden" display = "none">
+			<center><h3>Verzie</h3></center>
+			<table id="zoznamProduktov1" style="width:100%">
+				<thead>
+					<tr>
+						<th scope="col">Číslo dielu</th>
+						<th scope="col">Verzia</th>
+						<th scope="col">Dátum testovania</th>
+					</tr>
+				</thead>
+			</table>
+		</div>
+		
+		<script> document.getElementById("searchResult").style.visibility = "hidden";  document.getElementById("searchResult1").style.visibility = "hidden";</script>
+		<div class="container w-50 border border-primary rounded settery" id="settery">
+			<form onsubmit="return hideSetters();">
+				<div class="row">
+					<div class="col-5">
+						<label for="newZostava"><b>Zadajte zostavu</b></label>
+						<input type="text" id="newZostava" name="newZostava" placeholder="">
+					</div>
+					<div class="col-5">
+						<label for="newDate"><b>Zadajte dátum</b></label>
+						<input type="date" id="newDate" name="newDate" placeholder="">
+							
+					</div>
+					<div class="col-2">
+						<button type="submit">Potvrď</button>
+					</div>
+				</div>
+			</form>
+		</div>	
+	</body>
+</html>
